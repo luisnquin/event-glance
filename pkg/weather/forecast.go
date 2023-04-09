@@ -4,7 +4,7 @@ import (
 	"encoding/json"
 	"fmt"
 	"net/http"
-	"strings"
+	"net/url"
 	"time"
 
 	"github.com/go-resty/resty/v2"
@@ -44,8 +44,37 @@ func (f *ForecastResponse) AfterCurrentWeather(d time.Duration) (HourlyData, err
 type (
 	ForecastOption func(*forecastOptions)
 
-	forecastOptions struct{}
+	forecastOptions struct {
+		precipitationUnit string
+		temperatureUnit   string
+		windspeedUnit     string
+		elevation         *float64
+	}
 )
+
+func Temperature(unit TemperatureUnit) ForecastOption {
+	return func(fo *forecastOptions) {
+		fo.temperatureUnit = string(unit)
+	}
+}
+
+func Precipitation(unit PrecipitationUnit) ForecastOption {
+	return func(fo *forecastOptions) {
+		fo.precipitationUnit = string(unit)
+	}
+}
+
+func Windspeed(unit WindspeedUnit) ForecastOption {
+	return func(fo *forecastOptions) {
+		fo.windspeedUnit = string(unit)
+	}
+}
+
+func Elevation(elevation float64) ForecastOption {
+	return func(fo *forecastOptions) {
+		fo.elevation = &elevation
+	}
+}
 
 func Forecast(latitude, longitude float64, options ...ForecastOption) (*ForecastResponse, error) { // latitude=52.52&longitude=13.41
 	var queryOpts forecastOptions
@@ -54,14 +83,29 @@ func Forecast(latitude, longitude float64, options ...ForecastOption) (*Forecast
 		option(&queryOpts)
 	}
 
-	hourlyOptions := []string{"temperature_2m", "relativehumidity_2m", "windspeed_10m"}
+	query := make(url.Values)
+	query.Add("hourly", "temperature_2m,relativehumidity_2m,windspeed_10m")
+	query.Add("longitude", fmt.Sprintf("%.f", longitude))
+	query.Add("latitude", fmt.Sprintf("%.f", latitude))
+	query.Add("current_weather", "true")
 
-	res, err := resty.New().R().SetQueryParams(map[string]string{
-		"hourly":          strings.Join(hourlyOptions, ","),
-		"longitude":       fmt.Sprintf("%.f", longitude),
-		"latitude":        fmt.Sprintf("%.f", latitude),
-		"current_weather": "true",
-	}).Get("https://api.open-meteo.com/v1/forecast")
+	if queryOpts.elevation != nil {
+		query.Add("elevation", fmt.Sprintf("%.f", *queryOpts.elevation))
+	}
+
+	if queryOpts.temperatureUnit != "" {
+		query.Add("temperature_unit", queryOpts.temperatureUnit)
+	}
+
+	if queryOpts.windspeedUnit != "" {
+		query.Add("windspeed_unit", queryOpts.windspeedUnit)
+	}
+
+	if queryOpts.precipitationUnit != "" {
+		query.Add("precipitation_unit", queryOpts.precipitationUnit)
+	}
+
+	res, err := resty.New().R().SetQueryParamsFromValues(query).Get("https://api.open-meteo.com/v1/forecast")
 	if err != nil {
 		return nil, err
 	}

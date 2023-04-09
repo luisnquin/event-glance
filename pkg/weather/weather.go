@@ -12,7 +12,7 @@ type (
 		Temperature   float64   `json:"temperature"`
 		WindSpeed     float64   `json:"windspeed"`
 		WindDirection float64   `json:"winddirection"`
-		WeatherCode   Code      `json:"weather_code"`
+		WeatherCode   Code      `json:"weathercode"`
 		IsDay         uint8     `json:"is_day"`
 		Time          time.Time `json:"time"`
 	}
@@ -49,7 +49,8 @@ func (h *CurrentWeather) UnmarshalJSON(b []byte) error {
 	type Alias CurrentWeather
 
 	aux := struct {
-		Time string `json:"time"`
+		Time        string `json:"time"`
+		WeatherCode int    `json:"weathercode"`
 		*Alias
 	}{
 		Alias: (*Alias)(h),
@@ -66,7 +67,7 @@ func (h *CurrentWeather) UnmarshalJSON(b []byte) error {
 	}
 
 	h.WindDirection = aux.WindDirection
-	h.WeatherCode = aux.WeatherCode
+	h.WeatherCode = Code(aux.WeatherCode)
 	h.Temperature = aux.Temperature
 	h.WindSpeed = aux.WindSpeed
 	h.IsDay = aux.IsDay
