@@ -1,10 +1,9 @@
 package weather
 
 import (
+	"encoding/json"
 	"errors"
 	"time"
-
-	"github.com/goccy/go-json"
 )
 
 type (
@@ -13,7 +12,7 @@ type (
 		WindSpeed     float64   `json:"windspeed"`
 		WindDirection float64   `json:"winddirection"`
 		WeatherCode   Code      `json:"weathercode"`
-		IsDay         uint8     `json:"is_day"`
+		IsDay         bool      `json:"is_day"`
 		Time          time.Time `json:"time"`
 	}
 
@@ -29,6 +28,10 @@ type (
 		Temperature2M      []float64   `json:"temperature_2m"`
 		RelativeHumidity2M []float64   `json:"relativehumidity_2m"`
 		WindSpeed10M       []float64   `json:"windspeed_10m"`
+		WeatherCode        []Code      `json:"weathercode"`
+		Cloudcover         []float64   `json:"cloudcover"`
+		Visibility         []float64   `json:"visibility"`
+		IsDay              []bool      `json:"is_day"`
 	}
 )
 
@@ -37,6 +40,10 @@ type HourlyData struct {
 	Temperature2M      float64   `json:"temperature_2m"`
 	RelativeHumidity2M float64   `json:"relativehumidity_2m"`
 	WindSpeed10M       float64   `json:"windspeed_10m"`
+	WeatherCode        Code      `json:"weathercode"`
+	Cloudcover         float64   `json:"cloudcover"`
+	Visibility         float64   `json:"visibility"`
+	IsDay              bool      `json:"is_day"`
 }
 
 var errNotFound = errors.New("weather not found")
@@ -49,8 +56,8 @@ func (h *CurrentWeather) UnmarshalJSON(b []byte) error {
 	type Alias CurrentWeather
 
 	aux := struct {
-		Time        string `json:"time"`
-		WeatherCode int    `json:"weathercode"`
+		Time  string `json:"time"`
+		IsDay uint8  `json:"is_day"`
 		*Alias
 	}{
 		Alias: (*Alias)(h),
@@ -66,11 +73,14 @@ func (h *CurrentWeather) UnmarshalJSON(b []byte) error {
 		return err
 	}
 
+	if aux.IsDay == 1 {
+		h.IsDay = true
+	}
+
 	h.WindDirection = aux.WindDirection
-	h.WeatherCode = Code(aux.WeatherCode)
+	h.WeatherCode = aux.WeatherCode
 	h.Temperature = aux.Temperature
 	h.WindSpeed = aux.WindSpeed
-	h.IsDay = aux.IsDay
 
 	return nil
 }
@@ -79,7 +89,8 @@ func (h *Hourly) UnmarshalJSON(b []byte) error {
 	type Alias Hourly
 
 	aux := struct {
-		Time []string `json:"time"`
+		Time  []string `json:"time"`
+		IsDay []uint8  `json:"is_day"`
 		*Alias
 	}{}
 
@@ -99,9 +110,22 @@ func (h *Hourly) UnmarshalJSON(b []byte) error {
 		h.Time[i] = t
 	}
 
+	h.IsDay = make([]bool, len(aux.IsDay))
+
+	for i, isDay := range aux.IsDay {
+		if isDay == 1 {
+			h.IsDay[i] = true
+		} else {
+			h.IsDay[i] = false
+		}
+	}
+
 	h.RelativeHumidity2M = aux.RelativeHumidity2M
 	h.Temperature2M = aux.Temperature2M
 	h.WindSpeed10M = aux.WindSpeed10M
+	h.WeatherCode = aux.WeatherCode
+	h.Cloudcover = aux.Cloudcover
+	h.Visibility = aux.Visibility
 
 	return nil
 }

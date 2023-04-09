@@ -34,10 +34,15 @@ func (f *ForecastResponse) AfterCurrentWeather(d time.Duration) (HourlyData, err
 				RelativeHumidity2M: f.Hourly.RelativeHumidity2M[index],
 				Temperature2M:      f.Hourly.Temperature2M[index],
 				WindSpeed10M:       f.Hourly.WindSpeed10M[index],
+				WeatherCode:        f.Hourly.WeatherCode[index],
+				Cloudcover:         f.Hourly.Cloudcover[index],
+				Visibility:         f.Hourly.Visibility[index],
+				IsDay:              f.Hourly.IsDay[index],
 				Time:               f.Hourly.Time[index],
 			}, nil
 		}
 	}
+
 	return HourlyData{}, errNotFound
 }
 
@@ -84,7 +89,7 @@ func Forecast(latitude, longitude float64, options ...ForecastOption) (*Forecast
 	}
 
 	query := make(url.Values)
-	query.Add("hourly", "temperature_2m,relativehumidity_2m,windspeed_10m")
+	query.Add("hourly", "temperature_2m,relativehumidity_2m,windspeed_10m,cloudcover,is_day,visibility,weathercode")
 	query.Add("longitude", fmt.Sprintf("%.f", longitude))
 	query.Add("latitude", fmt.Sprintf("%.f", latitude))
 	query.Add("current_weather", "true")
@@ -113,6 +118,8 @@ func Forecast(latitude, longitude float64, options ...ForecastOption) (*Forecast
 	if res.StatusCode() != http.StatusOK {
 		return nil, fmt.Errorf("unexpected status code: %d, body: %s", res.StatusCode(), res.Body())
 	}
+
+	fmt.Printf("%s\n", res.Body())
 
 	var forecast ForecastResponse
 
