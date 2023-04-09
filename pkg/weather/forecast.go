@@ -4,7 +4,6 @@ import (
 	"encoding/json"
 	"fmt"
 	"net/http"
-	"strconv"
 	"strings"
 	"time"
 
@@ -45,16 +44,8 @@ func (f *ForecastResponse) AfterCurrentWeather(d time.Duration) (HourlyData, err
 type (
 	ForecastOption func(*forecastOptions)
 
-	forecastOptions struct {
-		CurrentWeather bool
-	}
+	forecastOptions struct{}
 )
-
-func WithCurrent() ForecastOption {
-	return func(fo *forecastOptions) {
-		fo.CurrentWeather = true
-	}
-}
 
 func Forecast(latitude, longitude float64, options ...ForecastOption) (*ForecastResponse, error) { // latitude=52.52&longitude=13.41
 	var queryOpts forecastOptions
@@ -66,10 +57,10 @@ func Forecast(latitude, longitude float64, options ...ForecastOption) (*Forecast
 	hourlyOptions := []string{"temperature_2m", "relativehumidity_2m", "windspeed_10m"}
 
 	res, err := resty.New().R().SetQueryParams(map[string]string{
-		"current_weather": strconv.FormatBool(queryOpts.CurrentWeather),
 		"hourly":          strings.Join(hourlyOptions, ","),
-		"latitude":        fmt.Sprintf("%.f", latitude),
 		"longitude":       fmt.Sprintf("%.f", longitude),
+		"latitude":        fmt.Sprintf("%.f", latitude),
+		"current_weather": "true",
 	}).Get("https://api.open-meteo.com/v1/forecast")
 	if err != nil {
 		return nil, err

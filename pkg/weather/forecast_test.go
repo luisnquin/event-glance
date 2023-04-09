@@ -9,7 +9,7 @@ import (
 )
 
 func TestSmoke(t *testing.T) {
-	response, err := weather.Forecast(-15.125280, 35.528610, weather.WithCurrent())
+	response, err := weather.Forecast(-15.125280, 35.528610)
 	if err != nil {
 		t.Error(err)
 		t.FailNow()
@@ -20,6 +20,7 @@ func TestSmoke(t *testing.T) {
 		panic(err)
 	}
 
+	fmt.Println(response.CurrentWeather.WeatherCode)
 	fmt.Println(response.CurrentWeather)
 	fmt.Println(data)
 }

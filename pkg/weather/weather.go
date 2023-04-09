@@ -12,7 +12,7 @@ type (
 		Temperature   float64   `json:"temperature"`
 		WindSpeed     float64   `json:"windspeed"`
 		WindDirection float64   `json:"winddirection"`
-		WeatherCode   float64   `json:"weather_code"`
+		WeatherCode   Code      `json:"weather_code"`
 		IsDay         uint8     `json:"is_day"`
 		Time          time.Time `json:"time"`
 	}
