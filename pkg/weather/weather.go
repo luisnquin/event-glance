@@ -1,6 +1,7 @@
 package weather
 
 import (
+	"errors"
 	"time"
 
 	"github.com/goccy/go-json"
@@ -31,6 +32,19 @@ type (
 	}
 )
 
+type HourlyData struct {
+	Time               time.Time `json:"time"`
+	Temperature2M      float64   `json:"temperature_2m"`
+	RelativeHumidity2M float64   `json:"relativehumidity_2m"`
+	WindSpeed10M       float64   `json:"windspeed_10m"`
+}
+
+var errNotFound = errors.New("weather not found")
+
+func IsNotFound(err error) bool {
+	return errors.Is(err, errNotFound)
+}
+
 func (h *CurrentWeather) UnmarshalJSON(b []byte) error {
 	type Alias CurrentWeather
 
@@ -50,6 +64,12 @@ func (h *CurrentWeather) UnmarshalJSON(b []byte) error {
 	if err != nil {
 		return err
 	}
+
+	h.WindDirection = aux.WindDirection
+	h.WeatherCode = aux.WeatherCode
+	h.Temperature = aux.Temperature
+	h.WindSpeed = aux.WindSpeed
+	h.IsDay = aux.IsDay
 
 	return nil
 }
@@ -77,6 +97,10 @@ func (h *Hourly) UnmarshalJSON(b []byte) error {
 
 		h.Time[i] = t
 	}
+
+	h.RelativeHumidity2M = aux.RelativeHumidity2M
+	h.Temperature2M = aux.Temperature2M
+	h.WindSpeed10M = aux.WindSpeed10M
 
 	return nil
 }
