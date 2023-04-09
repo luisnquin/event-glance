@@ -3,11 +3,10 @@ package weather
 import (
 	"encoding/json"
 	"fmt"
+	"io"
 	"net/http"
 	"net/url"
 	"time"
-
-	"github.com/go-resty/resty/v2"
 )
 
 // curl -s "https://api.open-meteo.com/v1/forecast?latitude=52.52&longitude=13.41&current_weather=true&hourly=temperature_2m,relativehumidity_2m,windspeed_10m"
@@ -110,20 +109,34 @@ func Forecast(latitude, longitude float64, options ...ForecastOption) (*Forecast
 		query.Add("precipitation_unit", queryOpts.precipitationUnit)
 	}
 
-	res, err := resty.New().R().SetQueryParamsFromValues(query).Get("https://api.open-meteo.com/v1/forecast")
+	req, err := http.NewRequest(http.MethodGet, "https://api.open-meteo.com/v1/forecast", http.NoBody)
 	if err != nil {
 		return nil, err
 	}
 
-	if res.StatusCode() != http.StatusOK {
-		return nil, fmt.Errorf("unexpected status code: %d, body: %s", res.StatusCode(), res.Body())
+	req.URL.RawQuery = query.Encode()
+
+	res, err := http.DefaultClient.Do(req)
+	if err != nil {
+		return nil, err
 	}
 
-	fmt.Printf("%s\n", res.Body())
+	resBody, err := io.ReadAll(res.Body)
+	if err != nil {
+		return nil, err
+	}
+
+	if err := res.Body.Close(); err != nil {
+		return nil, err
+	}
+
+	if res.StatusCode != http.StatusOK {
+		return nil, fmt.Errorf("unexpected status code: %d, body: %s", res.StatusCode, resBody)
+	}
 
 	var forecast ForecastResponse
 
-	if err := json.Unmarshal(res.Body(), &forecast); err != nil {
+	if err := json.Unmarshal(resBody, &forecast); err != nil {
 		return nil, err
 	}
 
