@@ -3,8 +3,8 @@ package weather_test
 import (
 	"fmt"
 	"testing"
+	"time"
 
-	"github.com/goccy/go-json"
 	"github.com/luisnquin/event-glance/pkg/weather"
 )
 
@@ -15,10 +15,11 @@ func TestSmoke(t *testing.T) {
 		t.FailNow()
 	}
 
-	data, err := json.Marshal(response)
+	data, err := response.AfterCurrentWeather(time.Hour)
 	if err != nil {
 		panic(err)
 	}
 
-	fmt.Printf("%s\n", data)
+	fmt.Println(response.CurrentWeather)
+	fmt.Println(data)
 }

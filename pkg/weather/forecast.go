@@ -6,6 +6,7 @@ import (
 	"net/http"
 	"strconv"
 	"strings"
+	"time"
 
 	"github.com/go-resty/resty/v2"
 )
@@ -25,7 +26,20 @@ type ForecastResponse struct {
 	Hourly                Hourly         `json:"hourly"`
 }
 
-func (f *ForecastResponse) In() {
+func (f *ForecastResponse) AfterCurrentWeather(d time.Duration) (HourlyData, error) {
+	targetHour := f.CurrentWeather.Time.Add(d).Round(time.Hour)
+
+	for index, t := range f.Hourly.Time {
+		if t.Equal(targetHour) {
+			return HourlyData{
+				RelativeHumidity2M: f.Hourly.RelativeHumidity2M[index],
+				Temperature2M:      f.Hourly.Temperature2M[index],
+				WindSpeed10M:       f.Hourly.WindSpeed10M[index],
+				Time:               f.Hourly.Time[index],
+			}, nil
+		}
+	}
+	return HourlyData{}, errNotFound
 }
 
 type (
