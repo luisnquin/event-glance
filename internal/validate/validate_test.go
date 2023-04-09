@@ -6,7 +6,7 @@ import (
 	"github.com/luisnquin/event-glance/internal/validate"
 )
 
-func TestValidateAWSRegion(t *testing.T) {
+func TestLikeAWSRegion(t *testing.T) {
 	testCases := []struct {
 		name     string
 		input    string
@@ -32,5 +32,31 @@ func TestValidateAWSRegion(t *testing.T) {
 				t.Errorf("expected '%v', but got '%v' for '%s'", tc.expected, result, tc.name)
 			}
 		})
+	}
+}
+
+func TestIsEmail(t *testing.T) {
+	validEmails := []string{
+		"email@example.com", "test.email+tag@gmail.com", "user@company.co.uk",
+		"info@my-site.com", "me@localhost", "my-email@subdomain.my-domain.com",
+	}
+
+	invalidEmails := []string{
+		"email@-example.com", "test.email+tag@.com", "user@company.",
+		"invalid.email@com.", "my-email@subdomain.my-domain..com",
+		"my-email@.subdomain.my-domain.com", "my-email@subdomain.",
+		"my-email@subdomain..my-domain.com", "me@.localhost",
+	}
+
+	for _, email := range validEmails {
+		if !validate.IsEmail(email) {
+			t.Errorf("%s is a valid email address, but it was rejected", email)
+		}
+	}
+
+	for _, email := range invalidEmails {
+		if validate.IsEmail(email) {
+			t.Errorf("%s is an invalid email address, but it was accepted", email)
+		}
 	}
 }
