@@ -6,6 +6,7 @@ require (
 	github.com/aws/aws-lambda-go v1.39.1
 	github.com/aws/aws-sdk-go v1.44.239
 	github.com/caarlos0/env/v8 v8.0.0
+	github.com/goccy/go-json v0.10.2
 )
 
 require (
