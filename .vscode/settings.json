@@ -2,5 +2,13 @@
     "material-icon-theme.folders.associations": {
         "weather": "Aws"
     },
-    "cSpell.userWords": ["relativehumidity", "windspeed", "resty", "generationtime", "winddirection", "weathercode"]
+    "cSpell.userWords": [
+        "relativehumidity",
+        "generationtime",
+        "winddirection",
+        "weathercode",
+        "cloudcover",
+        "windspeed",
+        "resty"
+    ]
 }
