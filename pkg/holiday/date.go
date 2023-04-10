@@ -1,9 +1,8 @@
 package holiday
 
 import (
+	"encoding/json"
 	"time"
-
-	"github.com/goccy/go-json"
 )
 
 // Represents a single holiday day, with information about the holiday name.

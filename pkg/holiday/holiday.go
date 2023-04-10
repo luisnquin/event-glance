@@ -4,13 +4,12 @@ package holiday
 
 import (
 	"context"
+	"encoding/json"
 	"errors"
 	"fmt"
 	"io"
 	"net/http"
 	"strings"
-
-	"github.com/goccy/go-json"
 )
 
 // Searches the holidays of an specific year and country using an external API
