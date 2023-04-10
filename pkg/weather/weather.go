@@ -1,9 +1,10 @@
 package weather
 
 import (
-	"encoding/json"
 	"errors"
 	"time"
+
+	"github.com/goccy/go-json"
 )
 
 type (

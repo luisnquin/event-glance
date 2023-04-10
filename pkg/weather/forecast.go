@@ -1,12 +1,14 @@
 package weather
 
 import (
-	"encoding/json"
+	"context"
 	"fmt"
 	"io"
 	"net/http"
 	"net/url"
 	"time"
+
+	"github.com/goccy/go-json"
 )
 
 // curl -s "https://api.open-meteo.com/v1/forecast?latitude=52.52&longitude=13.41&current_weather=true&hourly=temperature_2m,relativehumidity_2m,windspeed_10m"
@@ -80,7 +82,7 @@ func Elevation(elevation float64) ForecastOption {
 	}
 }
 
-func Forecast(latitude, longitude float64, options ...ForecastOption) (*ForecastResponse, error) { // latitude=52.52&longitude=13.41
+func Forecast(ctx context.Context, latitude, longitude float64, options ...ForecastOption) (*ForecastResponse, error) {
 	var queryOpts forecastOptions
 
 	for _, option := range options {
@@ -109,7 +111,7 @@ func Forecast(latitude, longitude float64, options ...ForecastOption) (*Forecast
 		query.Add("precipitation_unit", queryOpts.precipitationUnit)
 	}
 
-	req, err := http.NewRequest(http.MethodGet, "https://api.open-meteo.com/v1/forecast", http.NoBody)
+	req, err := http.NewRequestWithContext(ctx, http.MethodGet, "https://api.open-meteo.com/v1/forecast", http.NoBody)
 	if err != nil {
 		return nil, err
 	}
@@ -136,9 +138,5 @@ func Forecast(latitude, longitude float64, options ...ForecastOption) (*Forecast
 
 	var forecast ForecastResponse
 
-	if err := json.Unmarshal(resBody, &forecast); err != nil {
-		return nil, err
-	}
-
-	return &forecast, nil
+	return &forecast, json.Unmarshal(resBody, &forecast)
 }

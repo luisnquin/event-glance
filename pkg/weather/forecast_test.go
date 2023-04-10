@@ -1,6 +1,7 @@
 package weather_test
 
 import (
+	"context"
 	"fmt"
 	"testing"
 
@@ -9,7 +10,7 @@ import (
 )
 
 func TestSmoke(t *testing.T) {
-	response, err := weather.Forecast(-15.125280, 35.528610, weather.Temperature(weather.Celsius))
+	response, err := weather.Forecast(context.Background(), -15.125280, 35.528610, weather.Temperature(weather.Celsius))
 	if err != nil {
 		t.Error(err)
 		t.FailNow()
