@@ -1,10 +1,12 @@
 {
     "material-icon-theme.folders.associations": {
-        "weather": "Aws"
+        "weather": "Aws",
+        "holiday": "Event"
     },
     "cSpell.words": [
         "relativehumidity",
         "generationtime",
+        "publicholidays",
         "winddirection",
         "weathercode",
         "cloudcover",
