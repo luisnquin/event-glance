@@ -31,8 +31,8 @@ func main() {
 		return response
 	})
 
-	holidaysChan := lo.Async(func() []holiday.Day {
-		holidays, err := holiday.Search(ctx, time.Now().Year(), config.Holiday.CountryCode)
+	holidaysChan := lo.Async(func() []holiday.Date {
+		holidays, err := holiday.SearchForYear(ctx, config.Holiday.CountryCode, time.Now().Year())
 		if err != nil {
 			panic(err)
 		}

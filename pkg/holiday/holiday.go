@@ -1,66 +1,78 @@
+// Library that provides the ability to search for public holidays in a specific
+// country for a given year using an external REST API(https://github.com/nager/Nager.Date).
 package holiday
 
 import (
 	"context"
+	"errors"
 	"fmt"
 	"io"
 	"net/http"
 	"strings"
-	"time"
 
 	"github.com/goccy/go-json"
 )
 
-// curl https://date.nager.at/api/v3/publicholidays/2023/PE
-
-type Day struct {
-	Date        time.Time `json:"date"`
-	LocalName   string    `json:"localName"`
-	Name        string    `json:"name"`
-	CountryCode string    `json:"countryCode"`
-	Fixed       bool      `json:"fixed"`
-	Global      bool      `json:"global"`
-	Counties    any       `json:"counties"`
-	LaunchYear  uint16    `json:"launchYear"`
-	Types       []string  `json:"types"`
-}
-
-func (d *Day) UnmarshalJSON(b []byte) error {
-	type Alias Day
-
-	aux := struct {
-		Date string `json:"date"`
-		*Alias
-	}{
-		Alias: (*Alias)(d),
-	}
-
-	err := json.Unmarshal(b, &aux)
-	if err != nil {
-		return err
-	}
-
-	t, err := time.Parse("2006-01-02", aux.Date)
-	if err != nil {
-		return err
-	}
-
-	d.CountryCode = aux.CountryCode
-	d.LaunchYear = aux.LaunchYear
-	d.LocalName = aux.LocalName
-	d.Counties = aux.Counties
-	d.Global = aux.Global
-	d.Fixed = aux.Fixed
-	d.Types = aux.Types
-	d.Name = aux.Name
-	d.Date = t
-
-	return nil
-}
-
-func Search(ctx context.Context, year int, countryCode string) ([]Day, error) {
+// Searches the holidays of an specific year and country using an external API
+// and returns a slice of Day.
+func SearchForYear(ctx context.Context, countryCode string, year int) ([]Date, error) {
 	countryCode = strings.ToUpper(strings.TrimSpace(countryCode))
+	if len(countryCode) != 2 {
+		return nil, errors.New("invalid country code")
+	}
 
+	return searchForYear(ctx, countryCode, year)
+}
+
+// Allows to search for public holidays in a specific country for multiple years
+// at once using an external REST API. All requests are made by goroutines.
+func SearchForYears(ctx context.Context, countryCode string, years ...int) ([]Date, error) {
+	countryCode = strings.ToUpper(strings.TrimSpace(countryCode))
+	if len(countryCode) != 2 {
+		return nil, errors.New("invalid country code")
+	}
+
+	if len(years) == 0 {
+		return nil, errors.New("at least one year is required")
+	}
+
+	yearsSet := make(map[int]struct{}, len(years))
+
+	for _, year := range years {
+		yearsSet[year] = struct{}{}
+	}
+
+	holidaysChan := make(chan []Date)
+	errsChan := make(chan error)
+
+	for year := range yearsSet {
+		go func(year int) {
+			holidays, err := searchForYear(ctx, countryCode, year)
+			if err != nil {
+				errsChan <- err
+			}
+
+			holidaysChan <- holidays
+		}(year)
+	}
+
+	var holidays []Date
+
+	for i := 0; i < len(yearsSet); i++ {
+		select {
+		case holiday := <-holidaysChan:
+			holidays = append(holidays, holiday...)
+		case err := <-errsChan:
+			if err != nil {
+				return nil, err
+			}
+		}
+	}
+
+	return holidays, nil
+}
+
+func searchForYear(ctx context.Context, countryCode string, year int) ([]Date, error) {
 	url := fmt.Sprintf("https://date.nager.at/api/v3/publicholidays/%d/%s", year, countryCode)
 
 	req, err := http.NewRequestWithContext(ctx, http.MethodGet, url, http.NoBody)
@@ -86,7 +98,7 @@ func Search(ctx context.Context, year int, countryCode string) ([]Day, error) {
 		return nil, fmt.Errorf("unexpected status code: %d, body: %s", res.StatusCode, resBody)
 	}
 
-	var holidays []Day
+	var holidays []Date
 
 	return holidays, json.Unmarshal(resBody, &holidays)
 }
