@@ -8,8 +8,19 @@ import (
 )
 
 type App struct {
-	DebugMode    bool `env:"DEBUG_MODE,required"`
-	EmailService EmailServiceConfig
+	DebugMode bool `env:"DEBUG_MODE,required"`
+	Holiday   HolidayServiceConfig
+	Weather   WeatherServiceConfig
+	Email     EmailServiceConfig
+}
+
+type HolidayServiceConfig struct {
+	CountryCode string `env:"COUNTRY_CODE,required"`
+}
+
+type WeatherServiceConfig struct {
+	Latitude  float64 `env:"LATITUDE,required"`
+	Longitude float64 `env:"LONGITUDE,required"`
 }
 
 type EmailServiceConfig struct {
@@ -33,17 +44,17 @@ func New() (App, error) {
 }
 
 func (app App) validate() error {
-	if !validate.LikeAWSRegion(app.EmailService.Region) {
-		return fmt.Errorf("'%s' is not valid as an AWS region", app.EmailService.Region)
+	if !validate.LikeAWSRegion(app.Email.Region) {
+		return fmt.Errorf("'%s' is not valid as an AWS region", app.Email.Region)
 	}
 
-	if !validate.IsEmail(*app.EmailService.Sender) {
-		return fmt.Errorf("the sender email '%s' isn't valid", *app.EmailService.Sender)
+	if !validate.IsEmail(*app.Email.Sender) {
+		return fmt.Errorf("the sender email '%s' isn't valid", *app.Email.Sender)
 	}
 
-	for _, receiver := range app.EmailService.Receivers {
+	for _, receiver := range app.Email.Receivers {
 		if !validate.IsEmail(*receiver) {
-			return fmt.Errorf("the receiver email '%s' isn't valid", *app.EmailService.Sender)
+			return fmt.Errorf("the receiver email '%s' isn't valid", *app.Email.Sender)
 		}
 	}
 
