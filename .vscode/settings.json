@@ -2,6 +2,7 @@
     "material-icon-theme.folders.associations": {
         "weather": "Aws",
         "holiday": "Event",
+        "exchange": "Ci",
         "cinema": "Video"
     },
     "cSpell.words": [
@@ -14,6 +15,7 @@
         "figcaption",
         "cloudcover",
         "windspeed",
+        "apikey",
         "genero",
         "resty"
     ]
