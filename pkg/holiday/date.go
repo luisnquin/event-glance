@@ -28,7 +28,7 @@ type Date struct {
 }
 
 // A custom unmarshal method that helps to parse the holiday date.
-func (d *Date) UnmarshalJSON(b []byte) error {
+func (d *Date) UnmarshalJSON(data []byte) error {
 	type Alias Date
 
 	aux := struct {
@@ -38,12 +38,11 @@ func (d *Date) UnmarshalJSON(b []byte) error {
 		Alias: (*Alias)(d),
 	}
 
-	err := json.Unmarshal(b, &aux)
-	if err != nil {
+	if err := json.Unmarshal(data, &aux); err != nil {
 		return err
 	}
 
-	t, err := time.Parse("2006-01-02", aux.Date)
+	t, err := time.Parse(time.DateOnly, aux.Date)
 	if err != nil {
 		return err
 	}
