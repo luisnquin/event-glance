@@ -8,6 +8,7 @@ require (
 	github.com/caarlos0/env/v8 v8.0.0
 	github.com/goccy/go-json v0.10.2
 	github.com/gocolly/colly/v2 v2.1.0
+	github.com/goodsign/monday v1.0.1
 	github.com/samber/lo v1.38.1
 	golang.org/x/oauth2 v0.7.0
 	google.golang.org/api v0.118.0
@@ -24,7 +25,6 @@ require (
 	github.com/gobwas/glob v0.2.3 // indirect
 	github.com/golang/groupcache v0.0.0-20200121045136-8c9f03a8e57e // indirect
 	github.com/golang/protobuf v1.5.3 // indirect
-	github.com/goodsign/monday v1.0.1 // indirect
 	github.com/google/s2a-go v0.1.0 // indirect
 	github.com/google/uuid v1.3.0 // indirect
 	github.com/googleapis/enterprise-certificate-proxy v0.2.3 // indirect
