@@ -7,6 +7,7 @@ import (
 	"time"
 
 	"github.com/goccy/go-json"
+	"github.com/luisnquin/event-glance/pkg/exchange/currency"
 )
 
 type (
@@ -58,7 +59,16 @@ func (c *ConvertResponse) UnmarshalJSON(data []byte) error {
 	return nil
 }
 
+// Sends a request to the exchange rate API to convert an amount from one currency to another.
 func Convert(ctx context.Context, apiKey string, date time.Time, amount float64, from, to string) (ConvertResponse, error) {
+	if !currency.Is(from) {
+		return ConvertResponse{}, notValidCurrencyCode(from)
+	}
+
+	if !currency.Is(to) {
+		return ConvertResponse{}, notValidCurrencyCode(to)
+	}
+
 	query := url.Values{
 		"from":   []string{from},
 		"to":     []string{to},

@@ -39,3 +39,7 @@ func doGetRequest[T any](ctx context.Context, query url.Values, path, apiKey str
 
 	return response, json.NewDecoder(res.Body).Decode(&response)
 }
+
+func notValidCurrencyCode(code string) error {
+	return fmt.Errorf("'%s' is not a valid currency code", code)
+}

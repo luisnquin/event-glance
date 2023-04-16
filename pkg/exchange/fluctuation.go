@@ -8,6 +8,7 @@ import (
 	"time"
 
 	"github.com/goccy/go-json"
+	"github.com/luisnquin/event-glance/pkg/exchange/currency"
 )
 
 type (
@@ -70,9 +71,21 @@ func (f *FluctuationResponse) UnmarshalJSON(data []byte) error {
 	return nil
 }
 
+// Sends a request to the exchange rate API to calculate exchange rate fluctuations
+// between a base currency and one or more specified currencies over a given time period.
 func Fluctuation(ctx context.Context, apiKey string, startDate, endDate time.Time, base string, toCompare []string) (FluctuationResponse, error) {
 	if len(toCompare) == 0 {
 		return FluctuationResponse{}, errors.New("'toCompare' must have at least one iso4217 currency code")
+	}
+
+	for _, code := range toCompare {
+		if !currency.Is(code) {
+			return FluctuationResponse{}, notValidCurrencyCode(code)
+		}
+	}
+
+	if !currency.Is(base) {
+		return FluctuationResponse{}, notValidCurrencyCode(base)
 	}
 
 	query := url.Values{
