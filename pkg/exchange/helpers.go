@@ -2,12 +2,11 @@ package exchange
 
 import (
 	"context"
+	"encoding/json"
 	"fmt"
 	"io"
 	"net/http"
 	"net/url"
-
-	"github.com/goccy/go-json"
 )
 
 func doGetRequest[T any](ctx context.Context, query url.Values, path, apiKey string) (T, error) {

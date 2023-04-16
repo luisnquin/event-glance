@@ -2,12 +2,12 @@ package exchange
 
 import (
 	"context"
+	"encoding/json"
 	"errors"
 	"net/url"
 	"strings"
 	"time"
 
-	"github.com/goccy/go-json"
 	"github.com/luisnquin/event-glance/pkg/exchange/currency"
 )
 

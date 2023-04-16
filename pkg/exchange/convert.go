@@ -2,11 +2,11 @@ package exchange
 
 import (
 	"context"
+	"encoding/json"
 	"fmt"
 	"net/url"
 	"time"
 
-	"github.com/goccy/go-json"
 	"github.com/luisnquin/event-glance/pkg/exchange/currency"
 )
 
