@@ -1,16 +1,20 @@
 {
     "material-icon-theme.folders.associations": {
         "weather": "Aws",
-        "holiday": "Event"
+        "holiday": "Event",
+        "cinema": "Video"
     },
     "cSpell.words": [
         "relativehumidity",
         "generationtime",
+        "titulooriginal",
         "publicholidays",
         "winddirection",
         "weathercode",
+        "figcaption",
         "cloudcover",
         "windspeed",
+        "genero",
         "resty"
     ]
 }
