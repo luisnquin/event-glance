@@ -31,11 +31,65 @@
                 flex-direction: column;
                 gap: 2rem;
             }
+
+            main #film-premieres {
+                display: flex;
+                flex-direction: column;
+                align-items: center;
+                max-width: 95%;
+            }
+
+            main #film-premieres ul {
+                display: flex;
+                flex-direction: column;
+                align-items: center;
+            }
+
+            main #film-premieres ul .release-date {
+                display: flex;
+                flex-direction: column;
+                width: 100%;
+                gap: 5px;
+                padding: 10px 0;
+                margin: 10px;
+                border-bottom: #a59d9d dashed 1px;
+            }
+
+            main #film-premieres ul .release-date ul {
+                display: flex;
+                align-items: flex-end;
+                margin-bottom: 5px;
+                gap: 10px;
+            }
+
+            main #film-premieres ul .release-date ul li {
+                display: flex;
+                flex-direction: row;
+                gap: 10px;
+            }
+
+            main #film-premieres ul .release-date ul li img {
+                max-width: 150px;
+            }
+
+            main #film-premieres ul .release-date ul li p {
+                position: relative;
+                top: 25px;
+                display: flex;
+                flex-direction: column;
+                text-align: end;
+                gap: 3px;
+            }
+
+            main #film-premieres ul .release-date ul li p span {
+                font-weight: bold;
+                font-size: 12px;
+            }
         </style>
     </head>
     <body>
         <main>
-            <h1>Weekly report(from luisnquin/event-glance)</h1>
+            <h1>Weekly report</h1>
 
             <section id="forecast">
                 <h2>Forecast</h2>
@@ -96,14 +150,17 @@
             <section id="film-premieres">
                 <h2>Film premieres</h2>
                 <ul>
-                    <li>
+                    <li class="release-date">
                         <h3>April 20, 2023</h3>
 
                         <ul>
                             <li>
-                                <caption>
-                                    La segunda enmienda - Brian Skiba
-                                </caption>
+                                <p>
+                                    <caption>
+                                        La segunda enmienda
+                                    </caption>
+                                    <span>Brian Skiba</span>
+                                </p>
                                 <img
                                     alt="la-segunda-enmienda"
                                     src="https://static.cinepolis.com/img/peliculas/42053/1/1/42053.jpg"
@@ -111,9 +168,12 @@
                             </li>
 
                             <li>
-                                <caption>
-                                    Evil Dead: El despertar - Lee Cronin
-                                </caption>
+                                <p>
+                                    <caption>
+                                        Evil Dead: El despertar
+                                    </caption>
+                                    <span>Lee Cronin</span>
+                                </p>
                                 <img
                                     alt="evil-dead-el-despertar"
                                     src="https://static.cinepolis.com/img/peliculas/42121/1/1/42121.jpg"
@@ -121,9 +181,12 @@
                             </li>
 
                             <li>
-                                <caption>
-                                    Maravilloso desastre - Roger Kumble
-                                </caption>
+                                <p>
+                                    <caption>
+                                        Maravilloso desastre
+                                    </caption>
+                                    <span>Roger Kumble</span>
+                                </p>
                                 <img
                                     alt="maravilloso-desastre"
                                     src="https://static.cinepolis.com/img/peliculas/42013/1/1/42013.jpg"
@@ -131,9 +194,12 @@
                             </li>
 
                             <li>
-                                <caption>
-                                    Los tres mosqueteros: D'Artagnan - Martin Bourboulon
-                                </caption>
+                                <p>
+                                    <caption>
+                                        Los tres mosqueteros: D'Artagnan
+                                    </caption>
+                                    <span>Martin Bourboulon</span>
+                                </p>
                                 <img
                                     alt="los-tres-mosqueteros-d-artagnan"
                                     src="https://static.cinepolis.com/img/peliculas/42055/1/1/42055.jpg"
@@ -141,9 +207,12 @@
                             </li>
 
                             <li>
-                                <caption>
-                                    Madre Teresa y yo - Kamal Musale
-                                </caption>
+                                <p>
+                                    <caption>
+                                        Madre Teresa y yo
+                                    </caption>
+                                    <span>Kamal Musale</span>
+                                </p>
                                 <img
                                     alt="madre-teresa-y-yo"
                                     src="https://static.cinepolis.com/img/peliculas/42122/1/1/42122.jpg"
@@ -152,23 +221,29 @@
                         </ul>
                     </li>
 
-                    <li>
+                    <li class="release-date">
                         <h3>April 27, 2023</h3>
 
                         <ul>
                             <li>
-                                <caption>
-                                    Oso intoxicado - Elizabeth Banks
-                                </caption>
+                                <p>
+                                    <caption>
+                                        Oso intoxicado
+                                    </caption>
+                                    <span>Elizabeth Banks</span>
+                                </p>
                                 <img
                                     alt="oso-intoxicado"
                                     src="https://static.cinepolis.com/img/peliculas/42061/1/1/42061.jpg"
                                 />
                             </li>
                             <li>
-                                <caption>
-                                    Los Caballeros del Zodiaco: El inicio - Tomasz Baginski
-                                </caption>
+                                <p>
+                                    <caption>
+                                        Los Caballeros del Zodiaco: El inicio
+                                    </caption>
+                                    <span>Tomasz Baginski</span>
+                                </p>
                                 <img
                                     alt="los-caballeros-del-zodiaco-el-inicio"
                                     src="https://static.cinepolis.com/img/peliculas/42058/1/1/42058.jpg"
@@ -177,14 +252,17 @@
                         </ul>
                     </li>
 
-                    <li>
+                    <li class="release-date">
                         <h3>May 04, 2023</h3>
 
                         <ul>
                             <li>
-                                <caption>
-                                    Guardianes de la galaxia Vol. 3 - James Gunn
-                                </caption>
+                                <p>
+                                    <caption>
+                                        Guardianes de la galaxia Vol. 3
+                                    </caption>
+                                    <span>James Gunn</span>
+                                </p>
                                 <img
                                     alt="guardianes-de-la-galaxia-vol-3"
                                     src="https://static.cinepolis.com/img/peliculas/42119/1/1/42119.jpg"
@@ -193,14 +271,17 @@
                         </ul>
                     </li>
 
-                    <li>
+                    <li class="release-date">
                         <h3>May 18, 2023</h3>
 
                         <ul>
                             <li>
-                                <caption>
-                                    Rápidos y furiosos X - Louis Leterrier
-                                </caption>
+                                <p>
+                                    <caption>
+                                        Rapidos y furiosos X
+                                    </caption>
+                                    <span>Louis Leterrier</span>
+                                </p>
                                 <img
                                     alt="rapidos-y-furiosos-x"
                                     src="https://static.cinepolis.com/img/peliculas/42180/1/1/42180.jpg"
