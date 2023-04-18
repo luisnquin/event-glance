@@ -2,6 +2,7 @@ package exchange_test
 
 import (
 	"context"
+	"encoding/json"
 	"os"
 	"testing"
 	"time"
@@ -20,11 +21,15 @@ func TestFluctuationSmoke(t *testing.T) {
 		return
 	}
 
-	response, err := exchange.Fluctuation(ctx, apiKey, now, now, currency.USD, []string{currency.EUR})
+	const day = time.Hour * 24
+
+	response, err := exchange.Fluctuation(ctx, apiKey, now.Add(-day*30), now, currency.EUR, []string{currency.PEN})
 	if err != nil {
 		t.Error(err)
 		t.FailNow()
 	}
 
-	t.Log(response)
+	data, _ := json.MarshalIndent(response, "", "\t")
+
+	t.Logf("%s", data)
 }
