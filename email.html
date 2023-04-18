@@ -30,6 +30,64 @@
                 display: flex;
                 flex-direction: column;
                 gap: 2rem;
+                width: 100%;
+            }
+
+            main #currency-changes {
+                display: flex;
+                flex-direction: column;
+                align-items: center;
+                max-width: 95%;
+                overflow: hidden;
+                gap: 2rem;
+            }
+
+            main #currency-changes #time-intervals {
+                display: flex;
+                flex-direction: column;
+                gap: 2rem;
+                justify-content: center;
+            }
+
+            main #currency-changes #time-intervals .time-interval {
+                display: flex;
+                flex-direction: column;
+                align-items: center;
+                gap: 1.5rem;
+            }
+
+            main #currency-changes #time-intervals .time-interval h3 {
+                display: flex;
+                flex-direction: column;
+                align-items: center;
+            }
+
+            main #currency-changes #time-intervals .time-interval h3 .time-interval-dates {
+                font-size: 14px;
+                color: #474646;
+            }
+
+            main #currency-changes #time-intervals .time-interval .currency-changes {
+                display: flex;
+                flex-direction: row;
+                gap: 1rem;
+            }
+
+            main #currency-changes #time-intervals .time-interval .currency-changes .currency-change {
+                list-style: none;
+            }
+
+            main #currency-changes #time-intervals .time-interval .currency-changes .currency-change table {
+                text-align: center;
+                box-shadow: 0px 10px 15px -3px rgba(0, 0, 0, 0.1);
+                border-collapse: collapse;
+            }
+
+            main #currency-changes #time-intervals .time-interval .currency-changes .currency-change table,
+            main #currency-changes #time-intervals .time-interval .currency-changes .currency-change td,
+            main #currency-changes #time-intervals .time-interval .currency-changes .currency-change th {
+                border: rgba(0, 0, 0, 0.5) solid 1px;
+                padding: 10px;
             }
 
             main #film-premieres {
@@ -68,10 +126,6 @@
                 gap: 10px;
             }
 
-            main #film-premieres ul .release-date ul .movie img {
-                max-width: 150px;
-            }
-
             main #film-premieres ul .release-date ul .movie p {
                 position: relative;
                 top: 25px;
@@ -84,6 +138,11 @@
             main #film-premieres ul .release-date ul .movie p span {
                 font-weight: bold;
                 font-size: 12px;
+            }
+
+            main #film-premieres ul .release-date ul .movie img {
+                max-width: 150px;
+                box-shadow: 0px 10px 15px -3px rgba(0, 0, 0, 0.1);
             }
         </style>
     </head>
@@ -102,53 +161,93 @@
             </section>
 
             <section id="currency-changes">
-                <h2>Currency changes</h2>
+                <h2>Currency changes 📈</h2>
 
-                <div>
-                    <div>
-                        <h3>Week</h3>
+                <ul id="time-intervals">
+                    <li class="time-interval">
+                        <h3>
+                            <span>Last week</span>
+                            <span class="time-interval-dates">March 24 / March 31</span>
+                        </h3>
 
-                        <div>
-                            <h4>PEN to EUR</h4>
-                            <ul>
-                                <li>March 24, 2023: 4.84</li>
-                                <li>Today: 4.25</li>
-                            </ul>
-                        </div>
+                        <ul class="currency-changes">
+                            <li class="currency-change">
+                                <table>
+                                    <thead>
+                                        <th>Currency</th>
+                                        <th>Start</th>
+                                        <th>End</th>
+                                        <th>Diff</th>
+                                        <th>Diff(%)</th>
+                                    </thead>
 
-                        <div>
-                            <h4>PEN to USD</h4>
-                            <ul>
-                                <li>March 24, 2023: 3.54</li>
-                                <li>Today: 3.55</li>
-                            </ul>
-                        </div>
-                    </div>
+                                    <tbody>
+                                        <tr>
+                                            <td>EUR</td>
+                                            <td>4.076261</td>
+                                            <td>4.130202</td>
+                                            <td>0.0539</td>
+                                            <td>1.3233</td>
+                                        </tr>
 
-                    <div>
-                        <h3>Month</h3>
+                                        <tr>
+                                            <td>USD</td>
+                                            <td>3.750365</td>
+                                            <td>3.780499</td>
+                                            <td>0.0301</td>
+                                            <td>0.8035</td>
+                                        </tr>
+                                    </tbody>
+                                </table>
+                            </li>
+                        </ul>
+                    </li>
 
-                        <div>
-                            <h4>PEN to EUR</h4>
-                            <ul>
-                                <li>March 01, 2023: 4.84</li>
-                                <li>Today: 4.25</li>
-                            </ul>
-                        </div>
+                    <li class="time-interval">
+                        <h3>
+                            <span>Last month</span>
+                            <span class="time-interval-dates">March 18 / April 17</span>
+                        </h3>
 
-                        <div>
-                            <h4>PEN to USD</h4>
-                            <ul>
-                                <li>March 01, 2023: 3.54</li>
-                                <li>Today: 3.55</li>
-                            </ul>
-                        </div>
-                    </div>
-                </div>
+                        <!-- class="currency-change" -->
+
+                        <ul class="currency-changes">
+                            <li class="currency-change">
+                                <table>
+                                    <thead>
+                                        <th>Currency</th>
+                                        <th>Start</th>
+                                        <th>End</th>
+                                        <th>Diff</th>
+                                        <th>Diff(%)</th>
+                                    </thead>
+
+                                    <tbody>
+                                        <tr>
+                                            <td>EUR</td>
+                                            <td>4.01759</td>
+                                            <td>4.130202</td>
+                                            <td>0.1126</td>
+                                            <td>2.803</td>
+                                        </tr>
+
+                                        <tr>
+                                            <td>USD</td>
+                                            <td>3.736561</td>
+                                            <td>3.780499</td>
+                                            <td>0.0439</td>
+                                            <td>1.1759</td>
+                                        </tr>
+                                    </tbody>
+                                </table>
+                            </li>
+                        </ul>
+                    </li>
+                </ul>
             </section>
 
             <section id="film-premieres">
-                <h2>Film premieres</h2>
+                <h2>Film premieres 🎟️</h2>
                 <ul>
                     <li class="release-date">
                         <h3>April 20, 2023</h3>
@@ -160,6 +259,7 @@
                                         La segunda enmienda
                                     </caption>
                                     <span>Brian Skiba</span>
+                                    <span>140m</span>
                                 </p>
                                 <img
                                     alt="la-segunda-enmienda"
@@ -173,6 +273,7 @@
                                         Evil Dead: El despertar
                                     </caption>
                                     <span>Lee Cronin</span>
+                                    <span>140m</span>
                                 </p>
                                 <img
                                     alt="evil-dead-el-despertar"
@@ -186,6 +287,7 @@
                                         Maravilloso desastre
                                     </caption>
                                     <span>Roger Kumble</span>
+                                    <span>140m</span>
                                 </p>
                                 <img
                                     alt="maravilloso-desastre"
@@ -199,6 +301,7 @@
                                         Los tres mosqueteros: D'Artagnan
                                     </caption>
                                     <span>Martin Bourboulon</span>
+                                    <span>140m</span>
                                 </p>
                                 <img
                                     alt="los-tres-mosqueteros-d-artagnan"
@@ -212,6 +315,7 @@
                                         Madre Teresa y yo
                                     </caption>
                                     <span>Kamal Musale</span>
+                                    <span>140m</span>
                                 </p>
                                 <img
                                     alt="madre-teresa-y-yo"
@@ -231,6 +335,7 @@
                                         Oso intoxicado
                                     </caption>
                                     <span>Elizabeth Banks</span>
+                                    <span>140m</span>
                                 </p>
                                 <img
                                     alt="oso-intoxicado"
@@ -244,6 +349,7 @@
                                         Los Caballeros del Zodiaco: El inicio
                                     </caption>
                                     <span>Tomasz Baginski</span>
+                                    <span>140m</span>
                                 </p>
                                 <img
                                     alt="los-caballeros-del-zodiaco-el-inicio"
@@ -263,6 +369,7 @@
                                         Guardianes de la galaxia Vol. 3
                                     </caption>
                                     <span>James Gunn</span>
+                                    <span>140m</span>
                                 </p>
                                 <img
                                     alt="guardianes-de-la-galaxia-vol-3"
@@ -282,6 +389,7 @@
                                         Rapidos y furiosos X
                                     </caption>
                                     <span>Louis Leterrier</span>
+                                    <span>140m</span>
                                 </p>
                                 <img
                                     alt="rapidos-y-furiosos-x"
